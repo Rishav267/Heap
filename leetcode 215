@@ -1,0 +1,78 @@
+
+void minheapify(int* nums,int index,int numsSize)
+{
+    
+	int i=index;
+	int leftchild;
+	int rightchild;
+	int small,temp;
+
+	while(i<numsSize)
+	{
+        leftchild= ((2*i)+1); // write inside loop , i changes
+        
+	    rightchild= ((2*i)+2); // because updation is necessary
+        
+		small=i; // initializing index i as large in starting
+        
+		if(leftchild<numsSize && *(nums + leftchild)< *(nums + small))
+		{
+			 small = leftchild; // if leftchild is larger then index , store its index
+           
+		}
+		if(rightchild<numsSize && *(nums + rightchild)< *(nums + small))
+		{
+			small = rightchild; // if rightchild is larger then index , store its index
+            
+		}
+		if(small!=i)
+		{
+            
+			temp=*(nums + i);
+			*(nums + i)=*(nums + small);
+			*(nums + small)=temp;
+		}
+		else
+		{
+			break;
+		}
+		i=small; // update i
+        
+    }
+   
+}
+
+
+int findKthLargest(int* nums, int numsSize, int k){
+    int array[k];
+    int lastnode = numsSize-1;
+    int parentnode= (lastnode-1)/2;
+    int i;
+    for(i=parentnode;i>=0;i--)
+    {
+        minheapify(nums,i,numsSize);
+    }
+    
+    
+    
+    for(i=0;i<k;i++)
+    {
+        array[i]=*(nums+i);
+    }
+    
+    
+    for(i=k;i<numsSize;i++)
+    {
+        if(array[0]<*(nums+i))
+        {
+            array[0]=*(nums+i);
+            minheapify(array,0,k);
+        }
+    }
+    
+    /* for(i=0;i<k;i++)
+    {
+        printf("%d",array[i]);
+    }*/
+return array[0];
+}

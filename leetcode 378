@@ -1,0 +1,74 @@
+
+void maxheapify(int* arr,int index,int size)
+{
+	int i=index;
+	int leftchild;
+	int rightchild;
+	int large,temp;
+
+	while(i<size)
+	{
+        leftchild= (2*i + 1); // write inside loop , i changes
+	    rightchild= (2*i +2); // because updation is necessary
+		large=i; // initializing index i as large in starting
+
+		if(leftchild<size && arr[leftchild]> arr[i])
+		{
+			 large = leftchild; // if leftchild is larger then index , store its index
+		}
+		if(rightchild<size && arr[rightchild]>arr[large])
+		{
+			large = rightchild; // if rightchild is larger then index , store its index
+		}
+		if(large!=i)
+		{
+			temp=arr[i];
+			arr[i]=arr[large];
+			arr[large]=temp;
+		}
+		else
+		{
+			break;
+		}
+		i=large; // update i
+    }
+}
+
+int kthSmallest(int** matrix, int matrixSize, int* matrixColSize, int k){
+    
+    int i,j;
+    int id=0;
+    int n=matrixSize*matrixColSize[0]; //impotant to remember  n=(3*3)
+    int arr[n];
+    int array[k];
+    //int *arr=malloc(sizeof(int)*(n));
+    for(int i=0;i<matrixSize;i++)
+    {
+        for(int j=0;j<matrixSize;j++)
+        {
+            arr[id++]=matrix[i][j];
+        }
+    }
+    for(i=0;i<k;i++)
+    {
+        array[i]=arr[i];
+    }
+    
+    int parentindex=(k-2)/2;
+    for(i=parentindex;i>=0;i--)
+    {
+        maxheapify(array,i,k);
+        //printf("%d/",k);
+    }
+    
+    for(i=k;i<n;i++)
+    {
+        if(arr[i]<array[0])
+        {
+            array[0]=arr[i];
+            maxheapify(array,0,k);
+        }
+    }
+    
+return array[0];
+}

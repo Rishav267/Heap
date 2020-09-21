@@ -1,0 +1,111 @@
+void maxheapify(int* stones,int index,int stonesSize)
+{
+    
+	int i=index;
+
+	int leftchild;
+	int rightchild;
+	int large,temp;
+
+	while(i<=stonesSize)
+	{
+        //printf("%d",*stonesSize);
+        leftchild= ((2*i)+1); // write inside loop , i changes
+         //printf("%d,", leftchild);
+	    rightchild= ((2*i)+2); // because updation is necessary
+        //printf("%d,",rightchild);
+		large=i; // initializing index i as large in starting
+        //printf("%d,\n",large);
+		if(leftchild<=stonesSize && *(stones + leftchild)> *(stones + large))
+		{
+			 large = leftchild; // if leftchild is larger then index , store its index
+           
+		}
+		if(rightchild<=stonesSize && *(stones + rightchild)> *(stones + large))
+		{
+			large = rightchild; // if rightchild is larger then index , store its index
+            //printf("%d",large);
+		}
+		if(large!=i)
+		{
+            
+			temp=*(stones + i);
+			*(stones + i)=*(stones + large);
+			*(stones + large)=temp;
+		}
+		else
+		{
+			break;
+		}
+		i=large; // update i
+        //printf("%d",large);
+    }
+    
+   // return;
+}
+
+int lastStoneWeight(int* stones, int stonesSize){
+    int lastnode = stonesSize-1;
+    int parent = (lastnode-1)/2;
+	int i;
+    int top=0;
+	for(i=(lastnode-1)/2;i>=0;i--)
+	    {
+		    maxheapify(stones,i,lastnode);
+            int m;
+     
+        }
+    
+    
+    
+    while(lastnode>=1)
+    {
+        int y = *(stones);
+        //*(stones+top)=*(stones+lastnode);
+        //lastnode--;
+        
+        //maxheapify(stones,0,stonesSize);
+        
+        
+        int x,temp;
+        if(lastnode>=2 && *(stones+1)<*(stones+2)){
+            x=*(stones+2);
+            temp=2;
+            }
+        else{
+            x=*(stones+1);
+            temp=1;
+        }
+        
+        //top--;
+        if(x==y)
+        {
+            if(temp==lastnode){
+                *(stones)=0;
+                *(stones+lastnode)=0;
+                lastnode--;
+                maxheapify(stones,0,lastnode);
+                continue;
+            }
+            *(stones) =*(stones+lastnode);
+            
+            *(stones+temp) =*(stones+lastnode-1);
+            *(stones+lastnode)=0;
+            lastnode--;
+            *(stones+lastnode)=0;
+            lastnode--;
+        }
+        else
+        {
+            *(stones)= y-x;
+            *(stones+temp)=*(stones+lastnode);
+            *(stones+lastnode)=0;
+            lastnode--;
+        }
+        maxheapify(stones,temp,lastnode);
+        maxheapify(stones,0,lastnode);
+    }
+    
+return *stones;
+}
+

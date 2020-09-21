@@ -1,0 +1,110 @@
+
+typedef struct {
+    int k;
+    
+    int* arr;
+} KthLargest;
+
+
+void minheapify(int* nums,int index,int numsSize)
+{
+    
+	int i=index;
+
+	int leftchild;
+	int rightchild;
+	int small,temp;
+
+	while(i<numsSize)
+	{
+        leftchild= ((2*i)+1); // write inside loop , i changes
+        
+	    rightchild= ((2*i)+2); // because updation is necessary
+        
+		small=i; // initializing index i as large in starting
+        
+		if(leftchild<numsSize && *(nums + leftchild)< *(nums + small))
+		{
+			 small = leftchild; // if leftchild is larger then index , store its index
+           
+		}
+		if(rightchild<numsSize && *(nums + rightchild)< *(nums + small))
+		{
+			small = rightchild; // if rightchild is larger then index , store its index
+            
+		}
+		if(small!=i)
+		{
+            
+			temp=*(nums + i);
+			*(nums + i)=*(nums + small);
+			*(nums + small)=temp;
+		}
+		else
+		{
+			break;
+		}
+		i=small; // update i
+        
+    }
+   
+}
+
+
+KthLargest* kthLargestCreate(int k, int* nums, int numsSize) {
+    
+    KthLargest* obj = (KthLargest*)malloc(sizeof(KthLargest));
+    
+    obj->arr=(int*)malloc(k*sizeof(int));
+   obj->k = k;
+   
+    int i;
+    for(i=0;i<k && i<numsSize;i++)
+   {
+       obj->arr[i]=*(nums+i);
+        
+   }
+    for(i=(k-2)/2;i>=0;i--)
+    {
+        minheapify(obj->arr,i,k);
+    }
+    int var;
+    for(i=k;i<numsSize;i++)
+    {
+          var=kthLargestAdd(obj,*(nums+i));
+         
+    }
+    
+   
+    return obj;
+    
+}
+
+int kthLargestAdd(KthLargest* obj, int val) {
+    int i;
+    assert(obj);
+   
+    int temp=obj->arr[0];
+   if(temp>val)
+       return obj->arr[0];
+    else
+    {
+        obj->arr[0]=val;
+        
+        minheapify(obj->arr,0,obj->k);
+        return obj->arr[0];
+    }  
+}
+
+void kthLargestFree(KthLargest* obj) {
+    free(obj);
+    //free(array);
+}
+
+/**
+ * Your KthLargest struct will be instantiated and called as such:
+ * KthLargest* obj = kthLargestCreate(k, nums, numsSize);
+ * int param_1 = kthLargestAdd(obj, val);
+ 
+ * kthLargestFree(obj);
+*/
